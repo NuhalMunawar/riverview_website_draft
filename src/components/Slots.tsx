@@ -13,6 +13,19 @@ export default function Slots() {
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [slots, setSlots] = useState<Slot[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [showAllMobileSlots, setShowAllMobileSlots] = useState(false);
+
+  useEffect(() => {
+    const updateIsMobileView = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
+
+    updateIsMobileView();
+    window.addEventListener('resize', updateIsMobileView);
+
+    return () => window.removeEventListener('resize', updateIsMobileView);
+  }, []);
 
   useEffect(() => {
     fetchSlots();
@@ -48,6 +61,11 @@ export default function Slots() {
     }
     setLoading(false);
   };
+
+  const mobilePreviewCount = 5;
+  const visibleSlots = isMobileView && !showAllMobileSlots
+    ? slots.slice(0, mobilePreviewCount)
+    : slots;
 
   return (
     <section id="slots" className="py-20 bg-stone-100">
@@ -99,8 +117,9 @@ export default function Slots() {
           {loading ? (
             <div className="text-center py-20 text-stone-500">Loading slots...</div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {slots.map((slot) => (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {visibleSlots.map((slot) => (
                 <div 
                   key={slot.hour}
                   className={`p-4 rounded-xl border-2 transition-all ${
@@ -121,8 +140,21 @@ export default function Slots() {
                     </span>
                   </div>
                 </div>
-              ))}
-            </div>
+                ))}
+              </div>
+
+              {isMobileView && slots.length > mobilePreviewCount && (
+                <div className="mt-6 text-center md:hidden">
+                  <button
+                    type="button"
+                    onClick={() => setShowAllMobileSlots((prevValue) => !prevValue)}
+                    className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-emerald-700 text-white font-semibold hover:bg-emerald-600 transition-colors"
+                  >
+                    {showAllMobileSlots ? 'Show Fewer Slots' : 'View All Slots'}
+                  </button>
+                </div>
+              )}
+            </>
           )}
 
           <div className="mt-12 bg-emerald-900 rounded-2xl p-8 text-center text-white">

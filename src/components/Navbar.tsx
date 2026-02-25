@@ -1,8 +1,25 @@
-import { useState, type MouseEvent } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
 import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobileAtTop, setIsMobileAtTop] = useState(true);
+
+  useEffect(() => {
+    const updateMobileTopState = () => {
+      const isPhoneViewport = window.innerWidth < 768;
+      setIsMobileAtTop(isPhoneViewport && window.scrollY < 10);
+    };
+
+    updateMobileTopState();
+    window.addEventListener('scroll', updateMobileTopState, { passive: true });
+    window.addEventListener('resize', updateMobileTopState);
+
+    return () => {
+      window.removeEventListener('scroll', updateMobileTopState);
+      window.removeEventListener('resize', updateMobileTopState);
+    };
+  }, []);
 
   const glassStyle = {
     backdropFilter: 'blur(10px)',
@@ -47,7 +64,7 @@ export default function Navbar() {
   return (
     <nav className="fixed inset-x-0 top-0 z-50 px-3 sm:px-4 pt-3">
       <div
-        className="w-[90%] max-w-[1180px] mx-auto relative rounded-xl border border-white/15 bg-stone-950/38 shadow-lg shadow-black/25 overflow-hidden"
+        className={`${isMobileAtTop ? 'w-[78%] -translate-x-7 scale-[0.96]' : 'w-[84%] translate-x-0 scale-100'} md:w-[90%] md:translate-x-0 md:scale-100 max-w-[1180px] mx-auto relative rounded-xl border border-white/15 bg-stone-950/38 shadow-lg shadow-black/25 overflow-hidden transition-transform duration-500 ease-out`}
         style={glassStyle}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-white/12 via-white/5 to-transparent pointer-events-none" />
@@ -93,7 +110,7 @@ export default function Navbar() {
           <div className="md:hidden relative px-4 pb-4">
             <div className="rounded-xl border border-white/15 bg-stone-950/45 p-3 space-y-2" style={glassStyle}>
               <a href="#features" onClick={(event) => smoothScrollTo(event, 'features', { closeMenu: true })} className="block px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-colors">Features</a>
-              <a href="#slots" onClick={(event) => smoothScrollTo(event, 'slots', { closeMenu: true })} className="block px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-colors">Book a Slot</a>
+              <a href="#slots" onClick={(event) => smoothScrollTo(event, 'slots', { closeMenu: true })} className="block px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-colors">View Available Slots</a>
               <a href="#gallery" onClick={(event) => smoothScrollTo(event, 'gallery', { closeMenu: true })} className="block px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-colors">Gallery</a>
               <a href="#reviews" onClick={(event) => smoothScrollTo(event, 'reviews', { closeMenu: true })} className="block px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-colors">Reviews</a>
               <a href="#contact" onClick={(event) => smoothScrollTo(event, 'bottom', { closeMenu: true })} className="block px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-colors">Contact</a>

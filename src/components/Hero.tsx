@@ -4,6 +4,42 @@ import { ChevronDown, MapPin } from 'lucide-react';
 import mainPic from '../assets/main_pic.jpg';
 
 export default function Hero() {
+  const scrollToSlotsSlowly = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    const target = document.getElementById('slots');
+    if (!target) {
+      return;
+    }
+
+    const navOffset = 84;
+    const targetPosition = target.getBoundingClientRect().top + window.scrollY - navOffset;
+    const startPosition = window.scrollY;
+    const distance = targetPosition - startPosition;
+    const duration = 1000;
+    const startTime = performance.now();
+
+    const easeInOutCubic = (time: number) => {
+      return time < 0.5
+        ? 4 * time * time * time
+        : 1 - Math.pow(-2 * time + 2, 3) / 2;
+    };
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeInOutCubic(progress);
+
+      window.scrollTo(0, startPosition + distance * easedProgress);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  };
+
   const scrollToFeaturesSlowly = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
@@ -77,7 +113,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          <a href="#slots" className="px-8 py-3 bg-emerald-600 text-white rounded-full font-bold text-lg hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-900/20">
+          <a href="#slots" onClick={scrollToSlotsSlowly} className="px-8 py-3 bg-emerald-600 text-white rounded-full font-bold text-lg hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-900/20">
             View Available Slots
           </a>
           <a
