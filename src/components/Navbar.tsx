@@ -12,7 +12,7 @@ export default function Navbar() {
   return (
     <nav className="fixed inset-x-0 top-0 z-50 px-3 sm:px-4 pt-3">
       <div
-        className="w-[94%] max-w-[1320px] mx-auto relative rounded-xl border border-white/15 bg-stone-950/38 shadow-lg shadow-black/25 overflow-hidden"
+        className="w-[90%] max-w-[1180px] mx-auto relative rounded-xl border border-white/15 bg-stone-950/38 shadow-lg shadow-black/25 overflow-hidden"
         style={glassStyle}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-white/12 via-white/5 to-transparent pointer-events-none" />
