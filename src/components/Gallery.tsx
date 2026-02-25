@@ -33,8 +33,24 @@ export default function Gallery() {
     <section id="gallery" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-stone-900 uppercase tracking-tight">Gallery</h2>
-          <p className="mt-4 text-stone-600">A glimpse of Riverview Sports Arena.</p>
+          <motion.h2
+            initial={{ opacity: 0, y: 38, scale: 0.92 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.35 }}
+            transition={{ type: 'spring', stiffness: 140, damping: 18 }}
+            className="text-3xl font-bold text-stone-900 uppercase tracking-tight"
+          >
+            Gallery
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 26 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.35 }}
+            transition={{ duration: 0.55, delay: 0.12, ease: 'easeOut' }}
+            className="mt-4 text-stone-600"
+          >
+            A glimpse of Riverview Sports Arena.
+          </motion.p>
         </div>
 
         <div className="flex justify-end gap-2 mb-4">

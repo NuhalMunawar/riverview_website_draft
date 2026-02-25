@@ -102,8 +102,24 @@ export default function Reviews() {
     <section id="reviews" className="py-20 bg-stone-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold uppercase tracking-tight">What Players Say</h2>
-          <p className="mt-4 text-stone-400">Real reviews from our community.</p>
+          <motion.h2
+            initial={{ opacity: 0, y: 38, scale: 0.92 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.35 }}
+            transition={{ type: 'spring', stiffness: 140, damping: 18 }}
+            className="text-3xl font-bold uppercase tracking-tight"
+          >
+            What Players Say
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 26 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.35 }}
+            transition={{ duration: 0.55, delay: 0.12, ease: 'easeOut' }}
+            className="mt-4 text-stone-400"
+          >
+            Real reviews from our community.
+          </motion.p>
         </div>
 
         <div className="max-w-3xl mx-auto mb-10 bg-stone-800 rounded-2xl border border-stone-700 p-6 md:p-8">
