@@ -7,6 +7,7 @@ interface Review {
   customer_name: string;
   rating: number;
   comment: string;
+  created_at: string;
 }
 
 export default function Reviews() {
@@ -27,6 +28,25 @@ export default function Reviews() {
   useEffect(() => {
     loadReviews();
   }, []);
+
+  const averageRating = reviews.length
+    ? reviews.reduce((total, review) => total + review.rating, 0) / reviews.length
+    : 0;
+
+  const formattedAverage = averageRating.toFixed(1);
+
+  const formatReviewDate = (value: string) => {
+    const parsedDate = new Date(value.replace(' ', 'T'));
+    if (Number.isNaN(parsedDate.getTime())) {
+      return value;
+    }
+
+    return parsedDate.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
 
   const handleSubmitReview = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -78,7 +98,56 @@ export default function Reviews() {
           <p className="mt-4 text-stone-400">Real reviews from our community.</p>
         </div>
 
-        <div className="max-w-3xl mx-auto mb-12 bg-stone-800 rounded-2xl border border-stone-700 p-6 md:p-8">
+        <div className="max-w-3xl mx-auto mb-10 bg-stone-800 rounded-2xl border border-stone-700 p-6 md:p-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <p className="text-stone-300 text-sm">Average Rating</p>
+              <div className="text-4xl font-bold text-white leading-tight">{formattedAverage}</div>
+            </div>
+            <div>
+              <div className="flex gap-1 text-emerald-400 justify-start sm:justify-end">
+                {[...Array(5)].map((_, idx) => (
+                  <Star
+                    key={idx}
+                    size={20}
+                    fill={idx < Math.round(averageRating) ? 'currentColor' : 'none'}
+                  />
+                ))}
+              </div>
+              <p className="text-stone-400 text-sm mt-1 text-left sm:text-right">{reviews.length} review{reviews.length === 1 ? '' : 's'}</p>
+            </div>
+          </div>
+        </div>
+
+        {reviews.length > 0 ? (
+          <div className="mb-12 overflow-x-auto pb-2">
+            <div className="flex gap-6 min-w-max">
+              {reviews.map((review, i) => (
+                <motion.div
+                  key={review.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  className="w-[320px] bg-stone-800 rounded-2xl p-6 border border-stone-700"
+                >
+                  <div className="flex gap-1 mb-4 text-emerald-400">
+                    {[...Array(5)].map((_, idx) => (
+                      <Star key={idx} size={18} fill={idx < review.rating ? 'currentColor' : 'none'} />
+                    ))}
+                  </div>
+                  <p className="text-stone-300 mb-5 italic">"{review.comment}"</p>
+                  <div className="font-semibold text-white">{review.customer_name}</div>
+                  <div className="text-stone-400 text-sm mt-1">{formatReviewDate(review.created_at)}</div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <p className="text-stone-400 text-center mb-12">No reviews yet. Be the first to share your experience.</p>
+        )}
+
+        <div className="max-w-3xl mx-auto bg-stone-800 rounded-2xl border border-stone-700 p-6 md:p-8">
           <h3 className="text-xl font-semibold mb-4">Write Your Review</h3>
           <form onSubmit={handleSubmitReview} className="space-y-4">
             <div>
@@ -131,27 +200,6 @@ export default function Reviews() {
               {submitting ? 'Submitting...' : 'Submit Review'}
             </button>
           </form>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {reviews.slice(0, 3).map((review, i) => (
-            <motion.div 
-              key={review.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-stone-800 rounded-2xl p-8 border border-stone-700"
-            >
-              <div className="flex gap-1 mb-4 text-emerald-400">
-                {[...Array(5)].map((_, idx) => (
-                  <Star key={idx} size={18} fill={idx < review.rating ? "currentColor" : "none"} />
-                ))}
-              </div>
-              <p className="text-stone-300 mb-6 italic">"{review.comment}"</p>
-              <div className="font-semibold text-white">{review.customer_name}</div>
-            </motion.div>
-          ))}
         </div>
       </div>
     </section>
