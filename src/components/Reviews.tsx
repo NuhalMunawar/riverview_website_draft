@@ -1,6 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { motion } from 'motion/react';
-import { Star } from 'lucide-react';
+import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Review {
   id: number;
@@ -17,6 +17,7 @@ export default function Reviews() {
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
+  const [reviewStart, setReviewStart] = useState(0);
 
   const loadReviews = () => {
     fetch('/api/reviews')
@@ -28,6 +29,13 @@ export default function Reviews() {
   useEffect(() => {
     loadReviews();
   }, []);
+
+  const maxReviewStart = Math.max(0, reviews.length - 3);
+  const visibleReviews = reviews.slice(reviewStart, reviewStart + 3);
+
+  useEffect(() => {
+    setReviewStart((prevStart) => Math.min(prevStart, maxReviewStart));
+  }, [maxReviewStart]);
 
   const averageRating = reviews.length
     ? reviews.reduce((total, review) => total + review.rating, 0) / reviews.length
@@ -120,16 +128,37 @@ export default function Reviews() {
         </div>
 
         {reviews.length > 0 ? (
-          <div className="mb-12 overflow-x-auto pb-2">
-            <div className="flex gap-6 min-w-max">
-              {reviews.map((review, i) => (
+          <div className="mb-12">
+            <div className="flex items-center justify-end gap-2 mb-4">
+              <button
+                type="button"
+                onClick={() => setReviewStart((prev) => Math.max(0, prev - 1))}
+                disabled={reviewStart === 0}
+                className="p-2 rounded-full border border-stone-700 text-stone-300 hover:bg-stone-800 disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label="Previous reviews"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setReviewStart((prev) => Math.min(maxReviewStart, prev + 1))}
+                disabled={reviewStart >= maxReviewStart}
+                className="p-2 rounded-full border border-stone-700 text-stone-300 hover:bg-stone-800 disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label="Next reviews"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {visibleReviews.map((review, i) => (
                 <motion.div
                   key={review.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05 }}
-                  className="w-[320px] bg-stone-800 rounded-2xl p-6 border border-stone-700"
+                  className="bg-stone-800 rounded-2xl p-6 border border-stone-700"
                 >
                   <div className="flex gap-1 mb-4 text-emerald-400">
                     {[...Array(5)].map((_, idx) => (

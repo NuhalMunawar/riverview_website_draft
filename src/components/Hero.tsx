@@ -1,10 +1,10 @@
 import { motion } from 'motion/react';
-import { MapPin } from 'lucide-react';
+import { ChevronDown, MapPin } from 'lucide-react';
 import mainPic from '../assets/main_pic.jpg';
 
 export default function Hero() {
   return (
-    <div className="relative bg-stone-900 overflow-hidden">
+    <div id="home" className="relative bg-stone-900 overflow-hidden min-h-screen">
       <div className="absolute inset-0">
         <img
           src={mainPic}
@@ -14,7 +14,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/60 to-transparent" />
       </div>
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 flex flex-col items-center text-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-28 lg:pt-32 lg:pb-32 min-h-screen flex flex-col justify-center items-center text-center">
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -31,7 +31,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-6 text-xl text-stone-300 max-w-2xl"
         >
-          Chittagong's premier 7v7 football turf. Experience top-tier facilities with a breathtaking view of the Karnafully River.
+          Chittagong's premier 6v6 football turf. Experience top-tier facilities with a view of the Karnafully River.
         </motion.p>
         
         <motion.div 
@@ -49,6 +49,23 @@ export default function Hero() {
           </div>
         </motion.div>
       </div>
+
+      <a href="#features" className="absolute z-30 bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/95 hover:text-white transition-colors">
+        <motion.span
+          animate={{ y: [0, -6, 0], rotate: [0, 8, -8, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+          className="text-2xl leading-none drop-shadow"
+        >
+          ⚽
+        </motion.span>
+        <motion.span
+          animate={{ y: [0, 6, 0], opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+          className="mt-1"
+        >
+          <ChevronDown size={20} />
+        </motion.span>
+      </a>
     </div>
   );
 }
