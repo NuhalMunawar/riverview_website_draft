@@ -1,8 +1,45 @@
+import { type MouseEvent } from 'react';
 import { motion } from 'motion/react';
 import { ChevronDown, MapPin } from 'lucide-react';
 import mainPic from '../assets/main_pic.jpg';
 
 export default function Hero() {
+  const scrollToFeaturesSlowly = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    const target = document.getElementById('features');
+    if (!target) {
+      return;
+    }
+
+    const navOffset = 84;
+    const targetPosition = target.getBoundingClientRect().top + window.scrollY - navOffset;
+    const startPosition = window.scrollY;
+    const distance = targetPosition - startPosition;
+    const duration = 1400;
+    const startTime = performance.now();
+
+    const easeInOutCubic = (time: number) => {
+      return time < 0.5
+        ? 4 * time * time * time
+        : 1 - Math.pow(-2 * time + 2, 3) / 2;
+    };
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeInOutCubic(progress);
+
+      window.scrollTo(0, startPosition + distance * easedProgress);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  };
+
   return (
     <div id="home" className="relative bg-stone-900 overflow-hidden min-h-screen">
       <div className="absolute inset-0">
@@ -43,14 +80,23 @@ export default function Hero() {
           <a href="#slots" className="px-8 py-3 bg-emerald-600 text-white rounded-full font-bold text-lg hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-900/20">
             View Available Slots
           </a>
-          <div className="flex items-center text-stone-300 gap-2">
+          <a
+            href="https://maps.app.goo.gl/hteb64BMMyDNsLFN6"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center text-stone-300 gap-2 hover:text-emerald-300 transition-colors"
+          >
             <MapPin size={20} className="text-emerald-500" />
-            <span>Bridge Ghat, Firingi Bazar</span>
-          </div>
+            <span>Bridge Ghat, Firingi Bazar, Chattogram.</span>
+          </a>
         </motion.div>
       </div>
 
-      <a href="#features" className="absolute z-30 bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/95 hover:text-white transition-colors">
+      <a
+        href="#features"
+        onClick={scrollToFeaturesSlowly}
+        className="absolute z-30 bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/95 hover:text-white transition-colors"
+      >
         <motion.span
           animate={{ y: [0, -6, 0], rotate: [0, 8, -8, 0] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}

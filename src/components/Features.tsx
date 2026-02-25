@@ -14,8 +14,24 @@ export default function Features() {
     <section id="features" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-stone-900 uppercase tracking-tight">World-Class Facilities</h2>
-          <p className="mt-4 text-stone-600">Everything you need for the perfect match day experience.</p>
+          <motion.h2
+            initial={{ opacity: 0, y: 24, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="text-3xl font-bold text-stone-900 uppercase tracking-tight"
+          >
+            World-Class Facilities
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.12, ease: 'easeOut' }}
+            className="mt-4 text-stone-600"
+          >
+            Everything you need for the perfect match day experience.
+          </motion.p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -25,6 +25,17 @@ export default function Footer() {
                 <span>Bridge Ghat, Firingi Bazar, Beside Marine Drive (Naval 2), Chittagong</span>
               </li>
               <li className="flex items-center gap-3">
+                <MapPin size={18} className="text-emerald-500 shrink-0" />
+                <a
+                  href="https://maps.app.goo.gl/hteb64BMMyDNsLFN6"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  View on Google Maps
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
                 <Phone size={18} className="text-emerald-500 shrink-0" />
                 <span>01805102270</span>
               </li>
@@ -35,7 +46,7 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Follow Us</h3>
             <div className="flex flex-col gap-3">
               <a 
-                href="https://facebook.com/RIVERVIEWSPORTSARENA" 
+                href="https://www.facebook.com/profile.php?id=61586951468309" 
                 target="_blank" 
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 hover:text-emerald-400 transition-colors"
