@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Calendar, Phone } from 'lucide-react';
+import { Calendar, Phone, X } from 'lucide-react';
+import whatsappIcon from '../assets/whatsapp_icon.png';
 
 interface Slot {
   hour: number;
@@ -15,6 +16,13 @@ export default function Slots() {
   const [loading, setLoading] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const [showAllMobileSlots, setShowAllMobileSlots] = useState(false);
+  const [showSlotContactModal, setShowSlotContactModal] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
+
+  const closeSlotContactModal = () => {
+    setShowSlotContactModal(false);
+    setSelectedSlot(null);
+  };
 
   useEffect(() => {
     const updateIsMobileView = () => {
@@ -122,11 +130,15 @@ export default function Slots() {
                 {visibleSlots.map((slot) => (
                 <div 
                   key={slot.hour}
+                  onClick={() => {
+                    setSelectedSlot(slot);
+                    setShowSlotContactModal(true);
+                  }}
                   className={`p-4 rounded-xl border-2 transition-all ${
                     slot.isBooked 
                       ? 'bg-stone-100 border-stone-200 opacity-70' 
                       : 'bg-emerald-50 border-emerald-200 hover:border-emerald-400'
-                  }`}
+                  } cursor-pointer`}
                 >
                   <div className="font-semibold text-stone-900 mb-1">{slot.label}</div>
                   <div className="flex justify-between items-center">
@@ -183,6 +195,55 @@ export default function Slots() {
           </div>
         </div>
       </div>
+
+      {showSlotContactModal && (
+        <div
+          className="fixed inset-0 z-[80] bg-black/45 backdrop-blur-[1px] flex items-center justify-center p-4"
+          onClick={closeSlotContactModal}
+        >
+          <div
+            className="relative w-full max-w-sm rounded-2xl bg-white border border-stone-200 shadow-xl p-6 text-center"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={closeSlotContactModal}
+              className="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full border border-stone-200 text-stone-500 hover:bg-stone-100 transition-colors"
+              aria-label="Close"
+            >
+              <X size={16} />
+            </button>
+
+            {selectedSlot?.isBooked ? (
+              <p className="text-stone-900 font-semibold">Sorry this slot is already booked.</p>
+            ) : (
+              <>
+                <p className="text-stone-900 font-semibold">Call us to confirm your slot.</p>
+                <p className="mt-2 text-emerald-700 font-bold">01805-102270</p>
+
+                <div className="mt-5 flex items-center justify-center gap-4">
+                  <a
+                    href="tel:01805102270"
+                    className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-600 text-white hover:bg-emerald-500 transition-colors"
+                    aria-label="Call us"
+                  >
+                    <Phone size={20} />
+                  </a>
+                  <a
+                    href="https://wa.me/8801805102270"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center w-12 h-12 rounded-full overflow-hidden transition-transform hover:scale-105"
+                    aria-label="WhatsApp us"
+                  >
+                    <img src={whatsappIcon} alt="WhatsApp" className="w-full h-full object-cover rounded-full scale-[1.35]" />
+                  </a>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
