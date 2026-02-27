@@ -42,6 +42,10 @@ export default function Reviews() {
     : 0;
 
   const formattedAverage = averageRating.toFixed(1);
+  const getAverageStarFill = (starIndex: number) => {
+    const fillAmount = averageRating - starIndex;
+    return Math.min(1, Math.max(0, fillAmount));
+  };
 
   const formatReviewDate = (value: string) => {
     const parsedDate = new Date(value.replace(' ', 'T'));
@@ -131,11 +135,15 @@ export default function Reviews() {
             <div>
               <div className="flex gap-1 text-emerald-400 justify-start sm:justify-end">
                 {[...Array(5)].map((_, idx) => (
-                  <Star
-                    key={idx}
-                    size={20}
-                    fill={idx < Math.round(averageRating) ? 'currentColor' : 'none'}
-                  />
+                  <div key={idx} className="relative h-5 w-5">
+                    <Star size={20} className="absolute inset-0 text-stone-600" fill="none" />
+                    <div
+                      className="absolute inset-y-0 left-0 overflow-hidden"
+                      style={{ width: `${getAverageStarFill(idx) * 100}%` }}
+                    >
+                      <Star size={20} className="text-emerald-400" fill="currentColor" />
+                    </div>
+                  </div>
                 ))}
               </div>
               <p className="text-stone-400 text-sm mt-1 text-left sm:text-right">{reviews.length} review{reviews.length === 1 ? '' : 's'}</p>
