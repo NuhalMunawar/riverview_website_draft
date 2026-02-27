@@ -11,7 +11,9 @@ export default function RollingBall() {
       style={{ y, rotate }}
       className="fixed right-4 top-4 z-50 pointer-events-none drop-shadow-xl"
     >
-      <img src={footballIcon} alt="Football" className="h-12 w-12 rounded-full object-cover" />
+      <div className="h-12 w-12 rounded-full overflow-hidden">
+        <img src={footballIcon} alt="Football" className="h-full w-full rounded-full object-cover scale-[1.2]" />
+      </div>
     </motion.div>
   );
 }
