@@ -8,7 +8,20 @@ export default function Navbar() {
   useEffect(() => {
     const updateMobileTopState = () => {
       const isPhoneViewport = window.innerWidth < 768;
-      setIsMobileAtTop(isPhoneViewport && window.scrollY < 10);
+
+      if (!isPhoneViewport) {
+        setIsMobileAtTop(false);
+        return;
+      }
+
+      const heroScrollIndicator = document.getElementById('hero-scroll-indicator');
+      if (!heroScrollIndicator) {
+        setIsMobileAtTop(window.scrollY < 10);
+        return;
+      }
+
+      const triggerPoint = heroScrollIndicator.getBoundingClientRect().top + window.scrollY;
+      setIsMobileAtTop(window.scrollY < triggerPoint);
     };
 
     updateMobileTopState();
@@ -64,7 +77,7 @@ export default function Navbar() {
   return (
     <nav className="fixed inset-x-0 top-0 z-50 px-3 sm:px-4 pt-3">
       <div
-        className={`${isMobileAtTop ? 'w-[78%] -translate-x-7 scale-[0.96]' : 'w-[84%] translate-x-0 scale-100'} md:w-[90%] md:translate-x-0 md:scale-100 max-w-[1180px] mx-auto relative rounded-xl border border-white/15 bg-stone-950/38 shadow-lg shadow-black/25 overflow-hidden transition-transform duration-500 ease-out`}
+        className={`${isMobileAtTop ? 'w-[78%] -translate-x-7 scale-[0.96]' : 'w-[84%] translate-x-0 scale-100'} md:w-[90%] md:translate-x-0 md:scale-100 max-w-[1180px] mx-auto relative rounded-xl border border-white/15 bg-stone-950/38 shadow-lg shadow-black/25 overflow-hidden transition-all duration-900 ease-out`}
         style={glassStyle}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-white/12 via-white/5 to-transparent pointer-events-none" />

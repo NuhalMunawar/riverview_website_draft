@@ -30,8 +30,11 @@ export default function Reviews() {
     loadReviews();
   }, []);
 
-  const maxReviewStart = Math.max(0, reviews.length - 3);
+  const reviewsPerPage = 3;
+  const maxReviewStart = Math.max(0, Math.floor((reviews.length - 1) / reviewsPerPage) * reviewsPerPage);
   const visibleReviews = reviews.slice(reviewStart, reviewStart + 3);
+  const totalReviewPages = Math.max(1, Math.ceil(reviews.length / reviewsPerPage));
+  const currentReviewPage = Math.floor(reviewStart / reviewsPerPage) + 1;
 
   useEffect(() => {
     setReviewStart((prevStart) => Math.min(prevStart, maxReviewStart));
@@ -154,9 +157,12 @@ export default function Reviews() {
         {reviews.length > 0 ? (
           <div className="mb-12">
             <div className="flex items-center justify-end gap-2 mb-4">
+              <span className="text-sm text-stone-400 mr-1">
+                {currentReviewPage}/{totalReviewPages}
+              </span>
               <button
                 type="button"
-                onClick={() => setReviewStart((prev) => Math.max(0, prev - 1))}
+                onClick={() => setReviewStart((prev) => Math.max(0, prev - reviewsPerPage))}
                 disabled={reviewStart === 0}
                 className="p-2 rounded-full border border-stone-700 text-stone-300 hover:bg-stone-800 disabled:opacity-40 disabled:cursor-not-allowed"
                 aria-label="Previous reviews"
@@ -165,7 +171,7 @@ export default function Reviews() {
               </button>
               <button
                 type="button"
-                onClick={() => setReviewStart((prev) => Math.min(maxReviewStart, prev + 1))}
+                onClick={() => setReviewStart((prev) => Math.min(maxReviewStart, prev + reviewsPerPage))}
                 disabled={reviewStart >= maxReviewStart}
                 className="p-2 rounded-full border border-stone-700 text-stone-300 hover:bg-stone-800 disabled:opacity-40 disabled:cursor-not-allowed"
                 aria-label="Next reviews"

@@ -59,6 +59,7 @@ export default function Features() {
           {features.map((feature, index) => (
             <motion.div 
               key={feature.name}
+              id={index === 0 ? 'features-first-photo' : undefined}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

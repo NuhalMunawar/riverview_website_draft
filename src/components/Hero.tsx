@@ -129,9 +129,10 @@ export default function Hero() {
       </div>
 
       <a
+        id="hero-scroll-indicator"
         href="#features"
         onClick={scrollToFeaturesSlowly}
-        className="absolute z-30 bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/95 hover:text-white transition-colors"
+        className="absolute z-30 bottom-14 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/95 hover:text-white transition-colors"
       >
         <motion.span
           animate={{ y: [0, -6, 0], rotate: [0, 8, -8, 0] }}

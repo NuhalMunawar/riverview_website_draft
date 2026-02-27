@@ -55,13 +55,13 @@ export default function Footer() {
                 <span>@RIVERVIEW SPORTS ARENA</span>
               </a>
               <a 
-                href="https://wa.me/8801736193825" 
+                href="https://wa.me/8801805102270" 
                 target="_blank" 
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 hover:text-emerald-400 transition-colors"
               >
                 <MessageCircle size={20} />
-                <span>WhatsApp (01736193825)</span>
+                <span>WhatsApp (01805-102270)</span>
               </a>
             </div>
           </div>
